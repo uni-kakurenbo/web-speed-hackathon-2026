@@ -1,5 +1,5 @@
 import { createWriteStream } from "node:fs";
-import { readFile } from "node:fs/promises";
+import { readFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -294,15 +294,15 @@ async function generateSounds(): Promise<SoundSeed[]> {
     const sounds: SoundSeed[] = [];
 
     for (const { id, title, artist } of EXISTING_SOUNDS) {
-    const s3Key = `sounds/${id}.mp3`;
-    try {
-        const audioData = await getFileFromS3(s3Key);
-        const buffer = await audioCtx.decodeAudioData(
-            audioData.buffer.slice(
-                audioData.byteOffset,
-                audioData.byteOffset + audioData.length,
-            ) as ArrayBuffer,
-        );
+        const s3Key = `sounds/${id}.mp3`;
+        try {
+            const audioData = await getFileFromS3(s3Key);
+            const buffer = await audioCtx.decodeAudioData(
+                audioData.buffer.slice(
+                    audioData.byteOffset,
+                    audioData.byteOffset + audioData.length,
+                ) as ArrayBuffer,
+            );
             const leftChannel = buffer.getChannelData(0);
             const rightChannel =
                 buffer.numberOfChannels > 1
@@ -835,8 +835,9 @@ function generateDirectMessages(
 }
 
 async function writeJsonlFile<T>(filename: string, data: T[]): Promise<void> {
+    await mkdir(seedsDir, { recursive: true });
     const filePath = path.join(seedsDir, filename);
-    const stream = createWriteStream(filePath);
+    const stream = createWriteStream(filePath, {});
 
     for (const item of data) {
         stream.write(JSON.stringify(item) + "\n");
