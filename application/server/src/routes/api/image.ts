@@ -5,6 +5,9 @@ import { Router } from "express";
 import httpErrors from "http-errors";
 import { v4 as uuidv4 } from "uuid";
 
+import { PUBLIC_PATH } from "@web-speed-hackathon-2026/server/src/paths";
+import { copyMetadataWithExiftool } from "@web-speed-hackathon-2026/server/src/utils/exiftool";
+import { extractAltFromImage } from "@web-speed-hackathon-2026/server/src/utils/extract_metadata_from_image";
 import { runFfmpeg } from "@web-speed-hackathon-2026/server/src/utils/ffmpeg";
 import { uploadFileToS3 } from "@web-speed-hackathon-2026/server/src/utils/s3";
 
@@ -12,6 +15,33 @@ import { uploadFileToS3 } from "@web-speed-hackathon-2026/server/src/utils/s3";
 const EXTENSION = "avif";
 
 export const imageRouter = Router();
+
+imageRouter.get("/images/alt", async (req, res) => {
+    const src = req.query["src"];
+    if (typeof src !== "string") {
+        throw new httpErrors.BadRequest("src is required");
+    }
+
+    const safeSrc = src.split("?")[0]!.split("#")[0]!;
+    if (!safeSrc.startsWith("/images/")) {
+        throw new httpErrors.BadRequest("Invalid src");
+    }
+
+    const publicRoot = path.resolve(PUBLIC_PATH);
+    const imagePath = path.resolve(publicRoot, `.${safeSrc}`);
+    if (!(imagePath === publicRoot || imagePath.startsWith(`${publicRoot}/`))) {
+        throw new httpErrors.BadRequest("Invalid src");
+    }
+
+    const alt = await extractAltFromImage(imagePath);
+
+    return res
+        .status(200)
+        .type("application/json")
+        .send({
+            alt: alt ?? "説明はありません",
+        });
+});
 
 imageRouter.post("/images", async (req, res) => {
     if (req.session.userId === undefined) {
@@ -47,6 +77,8 @@ imageRouter.post("/images", async (req, res) => {
             "0",
             outputPath,
         ]);
+
+        await copyMetadataWithExiftool(inputPath, outputPath);
 
         output = await fs.readFile(outputPath);
     } catch {

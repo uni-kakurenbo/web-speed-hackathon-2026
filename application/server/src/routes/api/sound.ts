@@ -6,6 +6,7 @@ import httpErrors from "http-errors";
 import { OfflineAudioContext } from "node-web-audio-api";
 import { v4 as uuidv4 } from "uuid";
 
+import { copyMetadataWithExiftool } from "@web-speed-hackathon-2026/server/src/utils/exiftool";
 import { extractMetadataFromSound } from "@web-speed-hackathon-2026/server/src/utils/extract_metadata_from_sound";
 import { runFfmpeg } from "@web-speed-hackathon-2026/server/src/utils/ffmpeg";
 import { uploadFileToS3 } from "@web-speed-hackathon-2026/server/src/utils/s3";
@@ -52,6 +53,8 @@ soundRouter.post("/sounds", async (req, res) => {
             "-vn",
             outputPath,
         ]);
+
+        await copyMetadataWithExiftool(inputPath, outputPath);
 
         output = await fs.readFile(outputPath);
     } catch {

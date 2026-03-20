@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 
 import { PUBLIC_PATH } from "../src/paths.js";
+import { copyMetadataWithExiftool } from "../src/utils/exiftool.js";
 import { runFfmpeg } from "../src/utils/ffmpeg.js";
 
 async function convertDirectory(dir: string, maxWidth: number): Promise<void> {
@@ -14,11 +15,13 @@ async function convertDirectory(dir: string, maxWidth: number): Promise<void> {
 
         const name = path.basename(file, ext);
         const newFile = `${name}.avif`;
+        const sourcePath = path.resolve(dir, file);
+        const outputPath = path.resolve(dir, `./${newFile}`);
 
         await runFfmpeg([
             "-y",
             "-i",
-            path.resolve(dir, file),
+            sourcePath,
             "-vf",
             `scale='min(iw,${maxWidth})':-1`,
             "-c:v",
@@ -27,8 +30,9 @@ async function convertDirectory(dir: string, maxWidth: number): Promise<void> {
             "1",
             "-b:v",
             "0",
-            path.resolve(dir, `./${newFile}`),
+            outputPath,
         ]);
+        await copyMetadataWithExiftool(sourcePath, outputPath);
 
         console.log(
             `outputed: ${path.relative(PUBLIC_PATH, path.resolve(dir, newFile))}`,

@@ -5,6 +5,7 @@ import { Router } from "express";
 import httpErrors from "http-errors";
 import { v4 as uuidv4 } from "uuid";
 
+import { copyMetadataWithExiftool } from "@web-speed-hackathon-2026/server/src/utils/exiftool";
 import { uploadFileToS3 } from "@web-speed-hackathon-2026/server/src/utils/s3";
 import { runFfmpeg } from "@web-speed-hackathon-2026/server/src/utils/ffmpeg";
 
@@ -44,6 +45,8 @@ movieRouter.post("/movies", async (req, res) => {
             "1",
             outputPath,
         ]);
+
+        await copyMetadataWithExiftool(inputPath, outputPath);
 
         const output = await fs.readFile(outputPath);
 

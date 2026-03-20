@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 
 import { PUBLIC_PATH } from "../src/paths.js";
+import { copyMetadataWithExiftool } from "../src/utils/exiftool.js";
 import { runFfmpeg } from "../src/utils/ffmpeg.js";
 
 const doneFiles: string[] = [];
@@ -18,10 +19,12 @@ const doneFiles: string[] = [];
         if (doneFiles.includes(name)) continue;
 
         const newFile = `${name}.webm`;
+        const sourcePath = path.resolve(dir, file);
+        const outputPath = path.resolve(dir, `./${newFile}`);
         await runFfmpeg([
             "-y",
             "-i",
-            path.resolve(dir, file),
+            sourcePath,
             "-movflags",
             "faststart",
             "-vf",
@@ -30,8 +33,9 @@ const doneFiles: string[] = [];
             "yuv420p",
             "-row-mt",
             "1",
-            path.resolve(dir, `./${newFile}`),
+            outputPath,
         ]);
+        await copyMetadataWithExiftool(sourcePath, outputPath);
         console.log(`outputed: ${newFile}`);
     }
 })();

@@ -1,23 +1,12 @@
-import { load, ImageIFD } from "piexifjs";
 import { MouseEvent, useCallback, useId, useState } from "react";
 
 import { Button } from "@web-speed-hackathon-2026/client/src/components/foundation/Button";
 import { Modal } from "@web-speed-hackathon-2026/client/src/components/modal/Modal";
-import { fetchBinary } from "@web-speed-hackathon-2026/client/src/utils/fetchers";
+import { fetchJSON } from "@web-speed-hackathon-2026/client/src/utils/fetchers";
 
 interface Props {
     alt?: string;
     src: string;
-}
-
-function toBinaryString(data: ArrayBuffer): string {
-    return Array.from(new Uint8Array(data), (byte) =>
-        String.fromCharCode(byte),
-    ).join("");
-}
-
-function binaryStringToBytes(binary: string): Uint8Array {
-    return Uint8Array.from(binary, (char) => char.charCodeAt(0));
 }
 
 /**
@@ -47,15 +36,10 @@ export const CoveredImage = ({ alt: initialAlt, src }: Props) => {
 
             setIsExtracting(true);
             try {
-                const data = await fetchBinary(src);
-                const exif = load(toBinaryString(data));
-                const raw = exif?.["0th"]?.[ImageIFD.ImageDescription];
-                const altText =
-                    raw != null
-                        ? new TextDecoder().decode(
-                              binaryStringToBytes(String(raw)),
-                          )
-                        : "";
+                const response = await fetchJSON<{ alt: string }>(
+                    `/api/v1/images/alt?src=${encodeURIComponent(src)}`,
+                );
+                const altText = response.alt;
                 setExtractedAlt(altText || "説明はありません");
             } catch (e) {
                 console.error("Failed to extract ALT:", e);
