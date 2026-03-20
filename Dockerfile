@@ -10,7 +10,7 @@ LABEL fly_launch_runtime="Node.js"
 ENV PNPM_HOME=/pnpm
 
 WORKDIR /app
-RUN --mount=type=cache,id=s/e6939569-67bb-458b-b20c-677ae811a138-/root/npm,target=/root/.npm npm install -g pnpm@${PNPM_VERSION}
+RUN --mount=type=cache,id=s/e6939569-67bb-458b-b20c-677ae811a138-/root/.npm,target=/root/.npm npm install -g pnpm@${PNPM_VERSION}
 
 FROM base AS build
 
@@ -23,7 +23,7 @@ COPY ./application .
 
 RUN NODE_OPTIONS="--max-old-space-size=4096" pnpm build
 
-RUN --mount=type=cache,id=npm-1,id=s/e6939569-67bb-458b-b20c-677ae811a138-/pnpm/store,target=/pnpm/store CI=true pnpm install --frozen-lockfile --prod --filter @web-speed-hackathon-2026/server
+RUN --mount=type=cache,id=s/e6939569-67bb-458b-b20c-677ae811a138-/pnpm/store,target=/pnpm/store CI=true pnpm install --frozen-lockfile --prod --filter @web-speed-hackathon-2026/server
 
 FROM base
 
