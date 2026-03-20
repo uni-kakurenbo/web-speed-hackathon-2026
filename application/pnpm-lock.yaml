@@ -60,12 +60,6 @@ importers:
       image-size:
         specifier: 2.0.2
         version: 2.0.2
-      jquery:
-        specifier: 3.7.1
-        version: 3.7.1
-      jquery-binarytransport:
-        specifier: 1.0.0
-        version: 1.0.0
       jsmediatags:
         specifier: 3.9.7
         version: 3.9.7
@@ -151,9 +145,6 @@ importers:
       '@types/encoding-japanese':
         specifier: 2.2.1
         version: 2.2.1
-      '@types/jquery':
-        specifier: 3.5.33
-        version: 3.5.33
       '@types/jsmediatags':
         specifier: 3.9.6
         version: 3.9.6
@@ -1631,9 +1622,6 @@ packages:
   '@types/http-errors@2.0.5':
     resolution: {integrity: sha512-r8Tayk8HJnX0FztbZN7oVqGccWgw98T/0neJphO91KkmOzug1KkofZURD4UaD5uH8AqcFLfdPErnBod0u71/qg==}
 
-  '@types/jquery@3.5.33':
-    resolution: {integrity: sha512-SeyVJXlCZpEki5F0ghuYe+L+PprQta6nRZqhONt9F13dWBtR/ftoaIbdRQ7cis7womE+X2LKhsDdDtkkDhJS6g==}
-
   '@types/jsmediatags@3.9.6':
     resolution: {integrity: sha512-a2IVxVGXBCCVzONBFKGBb2mnTNMAt0shl+Mb5+wM5YVxymhgqNilr/7/x+XePYM2DnmWwCYlBRjq+8q7nsp2PA==}
 
@@ -1701,9 +1689,6 @@ packages:
 
   '@types/serve-static@1.15.9':
     resolution: {integrity: sha512-dOTIuqpWLyl3BBXU3maNQsS4A3zuuoYRNIvYSxxhebPfXg2mzWQEPne/nlJ37yOse6uGgR386uTpdsx4D0QZWA==}
-
-  '@types/sizzle@2.3.10':
-    resolution: {integrity: sha512-TC0dmN0K8YcWEAEfiPi5gJP14eJe30TTGjkvek3iM/1NdHHsdCA/Td6GvNndMOo/iSnIsZ4HuuhrYPDAmbxzww==}
 
   '@types/unist@2.0.11':
     resolution: {integrity: sha512-CmBKiL6NNo/OqgmMn95Fk9Whlp2mtvIv+KNpQKN2F4SjvrEesubTRWGYSg+BnWZOnlCaSTU1sMpsBOzgbYhnsA==}
@@ -2512,13 +2497,6 @@ packages:
 
   jackspeak@3.4.3:
     resolution: {integrity: sha512-OGlZQpz2yfahA/Rd1Y8Cd9SIEsqvXkLVoSw/cgwhnhFMDbsQFeZYoJJ7bIZBS9BcamUW96asq/npPWugM+RQBw==}
-
-  jquery-binarytransport@1.0.0:
-    resolution: {integrity: sha512-vqEyfGDHgZ/VrqOpfEuU+BCOl0QAF1EeWQjpk66PEwkErmuNCD2eNFnEn767PWCQ4mtvitFmjLes7ApyGe8byw==}
-    engines: {node: '>=0.4.0'}
-
-  jquery@3.7.1:
-    resolution: {integrity: sha512-m4avr8yL8kmFN8psrbFFFmB/If14iN5o9nw/NgnnM+kybDJpRsAynV2BsfpTYrTRysYUdADVD7CkUUizgkpLfg==}
 
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
@@ -5342,10 +5320,6 @@ snapshots:
 
   '@types/http-errors@2.0.5': {}
 
-  '@types/jquery@3.5.33':
-    dependencies:
-      '@types/sizzle': 2.3.10
-
   '@types/jsmediatags@3.9.6': {}
 
   '@types/katex@0.16.8': {}
@@ -5413,8 +5387,6 @@ snapshots:
       '@types/http-errors': 2.0.5
       '@types/node': 22.18.8
       '@types/send': 0.17.5
-
-  '@types/sizzle@2.3.10': {}
 
   '@types/unist@2.0.11': {}
 
@@ -6291,10 +6263,6 @@ snapshots:
       '@isaacs/cliui': 8.0.2
     optionalDependencies:
       '@pkgjs/parseargs': 0.11.0
-
-  jquery-binarytransport@1.0.0: {}
-
-  jquery@3.7.1: {}
 
   js-tokens@4.0.0: {}
 
