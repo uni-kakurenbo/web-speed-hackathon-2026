@@ -37,7 +37,7 @@ movieRouter.post("/movies", async (req, res) => {
             "-movflags",
             "faststart",
             "-vf",
-            "scale=500:-1",
+            "scale='min(iw,600)':-1",
             "-pix_fmt",
             "yuv420p",
             "-row-mt",
