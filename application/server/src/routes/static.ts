@@ -17,6 +17,39 @@ const setRevalidatedCacheHeader = (res: {
     res.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
 };
 
+const setPublicCacheHeader = (
+    res: { setHeader: (name: string, value: string) => void },
+    filePath: string,
+) => {
+    const ext = path.extname(filePath);
+
+    if (ext === ".html") {
+        setRevalidatedCacheHeader(res);
+        return;
+    }
+
+    if ([".json", ".txt", ".xml", ".webmanifest"].includes(ext)) {
+        res.setHeader(
+            "Cache-Control",
+            "public, max-age=300, stale-while-revalidate=86400",
+        );
+        return;
+    }
+
+    if ([".js", ".mjs", ".css", ".map"].includes(ext)) {
+        res.setHeader(
+            "Cache-Control",
+            "public, max-age=3600, stale-while-revalidate=86400",
+        );
+        return;
+    }
+
+    res.setHeader(
+        "Cache-Control",
+        "public, max-age=86400, stale-while-revalidate=604800",
+    );
+};
+
 const setClientDistCacheHeader = (
     res: { setHeader: (name: string, value: string) => void },
     filePath: string,
@@ -39,7 +72,7 @@ staticRouter.use(
 
 staticRouter.use(
     serveStatic(PUBLIC_PATH, {
-        setHeaders: setRevalidatedCacheHeader,
+        setHeaders: setPublicCacheHeader,
     }),
 );
 
