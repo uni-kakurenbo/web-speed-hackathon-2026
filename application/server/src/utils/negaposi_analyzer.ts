@@ -1,17 +1,5 @@
-import { createRequire } from "module";
-import path from "path";
-import Bluebird from "bluebird";
-import kuromoji, { type Tokenizer, type IpadicFeatures } from "kuromoji";
 import analyze from "negaposi-analyzer-ja";
-
-const require = createRequire(import.meta.url);
-const kuromojiDir = path.dirname(require.resolve("kuromoji/package.json"));
-const dicPath = path.join(kuromojiDir, "dict");
-
-async function getTokenizer(): Promise<Tokenizer<IpadicFeatures>> {
-    const builder = Bluebird.promisifyAll(kuromoji.builder({ dicPath }));
-    return await (builder as any).buildAsync();
-}
+import { getKuromojiTokenizer } from "@web-speed-hackathon-2026/server/src/utils/kuromoji_tokenizer";
 
 type SentimentResult = {
     score: number;
@@ -19,7 +7,7 @@ type SentimentResult = {
 };
 
 export async function analyzeSentiment(text: string): Promise<SentimentResult> {
-    const tokenizer = await getTokenizer();
+    const tokenizer = await getKuromojiTokenizer();
     const tokens = tokenizer.tokenize(text);
 
     const score = analyze(tokens);

@@ -27,26 +27,6 @@ export default defineConfig({
         tsconfigPaths: true,
         alias: [
             {
-                find: /^bayesian-bm25$/,
-                replacement: path.resolve(
-                    __dirname,
-                    "node_modules",
-                    "bayesian-bm25",
-                    "dist",
-                    "index.js",
-                ),
-            },
-            {
-                find: /^kuromoji$/,
-                replacement: path.resolve(
-                    __dirname,
-                    "node_modules",
-                    "kuromoji",
-                    "build",
-                    "kuromoji.js",
-                ),
-            },
-            {
                 find: /^\@ffmpeg\/ffmpeg$/,
                 replacement: path.resolve(
                     __dirname,
