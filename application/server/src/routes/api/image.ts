@@ -29,14 +29,62 @@ imageRouter.get("/images/alt", async (req, res) => {
     }
 
     const safeSrc = src.split("?")[0]!.split("#")[0]!;
-    if (!safeSrc.startsWith("/images/")) {
+    const normalizedSrc = safeSrc.startsWith("/update/")
+        ? safeSrc.slice("/update".length)
+        : safeSrc;
+    if (!normalizedSrc.startsWith("/images/")) {
         throw new httpErrors.BadRequest("Invalid src");
     }
 
     const publicRoot = path.resolve(PUBLIC_PATH);
-    const imagePath = path.resolve(publicRoot, `.${safeSrc}`);
-    if (!(imagePath === publicRoot || imagePath.startsWith(`${publicRoot}/`))) {
-        throw new httpErrors.BadRequest("Invalid src");
+    const updateRoot = path.resolve(publicRoot, "../update");
+
+    const candidateEntries = [
+        {
+            root: publicRoot,
+            absolutePath: path.resolve(publicRoot, `.${safeSrc}`),
+        },
+        {
+            root: publicRoot,
+            absolutePath: path.resolve(publicRoot, `.${normalizedSrc}`),
+        },
+        {
+            root: updateRoot,
+            absolutePath: path.resolve(updateRoot, `.${normalizedSrc}`),
+        },
+    ];
+
+    const candidates = candidateEntries.filter(
+        (entry, index, self) =>
+            self.findIndex(
+                (value) => value.absolutePath === entry.absolutePath,
+            ) === index,
+    );
+
+    const isInRoot = (targetPath: string, rootPath: string) =>
+        targetPath === rootPath || targetPath.startsWith(`${rootPath}/`);
+
+    for (const { root, absolutePath } of candidates) {
+        if (!isInRoot(absolutePath, root)) {
+            throw new httpErrors.BadRequest("Invalid src");
+        }
+    }
+
+    let imagePath: string | null = null;
+    for (const { absolutePath } of candidates) {
+        try {
+            const fileStats = await stat(absolutePath);
+            if (fileStats.isFile()) {
+                imagePath = absolutePath;
+                break;
+            }
+        } catch {
+            continue;
+        }
+    }
+
+    if (imagePath === null) {
+        throw new httpErrors.NotFound("Image not found");
     }
 
     const alt = await extractAltFromImage(imagePath);
