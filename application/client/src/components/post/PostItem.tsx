@@ -24,9 +24,15 @@ export const PostItem = ({ post, prioritizeLcpImage = false }: Props) => {
                         >
                             <img
                                 alt={post.user.profileImage.alt}
+                                fetchPriority={
+                                    prioritizeLcpImage ? "high" : "auto"
+                                }
+                                loading={prioritizeLcpImage ? "eager" : "lazy"}
                                 src={getProfileImagePath(
                                     post.user.profileImage.id,
                                 )}
+                                width={64}
+                                height={64}
                             />
                         </Link>
                     </div>
