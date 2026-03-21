@@ -32,4 +32,12 @@ app.use("/api/v1", (_req, res, next) => {
 });
 
 app.use("/api/v1", apiRouter);
+
+app.use(/^\/crok(?:\/|$)/, (_req, res, next) => {
+    res.header({
+        "Cache-Control": "no-store",
+    });
+    return next();
+});
+
 app.use(staticRouter);
