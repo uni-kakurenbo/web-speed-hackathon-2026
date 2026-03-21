@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 import { copyMetadataWithExiftool } from "@web-speed-hackathon-2026/server/src/utils/exiftool";
 import { extractMetadataFromSound } from "@web-speed-hackathon-2026/server/src/utils/extract_metadata_from_sound";
 import { runFfmpeg } from "@web-speed-hackathon-2026/server/src/utils/ffmpeg";
-import { uploadFileToS3 } from "@web-speed-hackathon-2026/server/src/utils/s3";
+import { UPLOAD_PATH } from "@web-speed-hackathon-2026/server/src/paths";
 
 // 変換した音声の拡張子
 const EXTENSION = "mp3";
