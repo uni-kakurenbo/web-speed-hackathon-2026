@@ -1,5 +1,4 @@
 import { lazy, Suspense, useCallback, useEffect, useId, useState } from "react";
-import { HelmetProvider } from "react-helmet";
 import { Route, Routes, useLocation, useNavigate } from "react-router";
 
 import { AppPage } from "@web-speed-hackathon-2026/client/src/components/application/AppPage";
@@ -91,7 +90,7 @@ export const AppContainer = () => {
     const newPostModalId = useId();
 
     return (
-        <HelmetProvider>
+        <>
             <AppPage
                 activeUser={activeUser}
                 authModalId={authModalId}
@@ -156,6 +155,6 @@ export const AppContainer = () => {
                 />
                 <NewPostModalContainer id={newPostModalId} />
             </Suspense>
-        </HelmetProvider>
+        </>
     );
 };
