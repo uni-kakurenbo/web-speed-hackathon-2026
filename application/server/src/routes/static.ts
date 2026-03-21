@@ -46,7 +46,7 @@ const setPublicCacheHeader = (
 
     res.setHeader(
         "Cache-Control",
-        "public, max-age=86400, stale-while-revalidate=604800",
+        "public, max-age=15552000, stale-while-revalidate=604800",
     );
 };
 

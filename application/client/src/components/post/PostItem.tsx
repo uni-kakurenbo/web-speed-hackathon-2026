@@ -24,6 +24,7 @@ export const PostItem = ({ post, prioritizeLcpImage = false }: Props) => {
                         >
                             <img
                                 alt={post.user.profileImage.alt}
+                                className="h-full w-full object-cover"
                                 fetchPriority={
                                     prioritizeLcpImage ? "high" : "auto"
                                 }
