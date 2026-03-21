@@ -1,10 +1,12 @@
-import moment from "moment";
-
 import { Link } from "@web-speed-hackathon-2026/client/src/components/foundation/Link";
 import { ImageArea } from "@web-speed-hackathon-2026/client/src/components/post/ImageArea";
 import { MovieArea } from "@web-speed-hackathon-2026/client/src/components/post/MovieArea";
 import { SoundArea } from "@web-speed-hackathon-2026/client/src/components/post/SoundArea";
 import { TranslatableText } from "@web-speed-hackathon-2026/client/src/components/post/TranslatableText";
+import {
+    formatLongDateJa,
+    toIsoDateTime,
+} from "@web-speed-hackathon-2026/client/src/utils/date";
 import { getProfileImagePath } from "@web-speed-hackathon-2026/client/src/utils/get_path";
 
 interface Props {
@@ -83,12 +85,8 @@ export const PostItem = ({ post, prioritizeLcpImage = false }: Props) => {
                             className="text-cax-text-muted hover:underline"
                             to={`/posts/${post.id}`}
                         >
-                            <time
-                                dateTime={moment(post.createdAt).toISOString()}
-                            >
-                                {moment(post.createdAt)
-                                    .locale("ja")
-                                    .format("LL")}
+                            <time dateTime={toIsoDateTime(post.createdAt)}>
+                                {formatLongDateJa(post.createdAt)}
                             </time>
                         </Link>
                     </p>
