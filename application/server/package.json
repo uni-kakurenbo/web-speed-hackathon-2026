@@ -15,7 +15,7 @@
         "jpeg-to-avif": "tsx ./scripts/jpeg_to_avif.ts"
     },
     "dependencies": {
-        "@faker-js/faker": "10.3.0",
+        "@faker-js/faker": "10.2.0",
         "@google-cloud/translate": "9.3.0",
         "@tsconfig/strictest": "2.0.8",
         "@web-speed-hackathon-2026/server": "workspace:*",
